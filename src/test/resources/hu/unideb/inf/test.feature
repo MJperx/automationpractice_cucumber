@@ -31,3 +31,6 @@ Feature: YourLogo login process
     Given Fill the search input with something
     Then The Search icon is clicked
     And Add the first element to cart
+
+  Scenario:
+    Given Close browser

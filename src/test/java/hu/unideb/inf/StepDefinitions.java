@@ -9,8 +9,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
-
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -18,13 +18,14 @@ public class StepDefinitions {
 
     static WebDriver driver;
 
-    static final String EMAIL = "v4l4mi_093@valami.com";
+    static final String EMAIL = "v4l4mi_0419144030@valami.com";
     static final String PASSWD = "v4l4mi";
 
     static {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.manage().window().maximize();
     }
 
     @Given("The home page is opened")
@@ -125,5 +126,20 @@ public class StepDefinitions {
     public void addTheFirstElementToCart() {
         List<WebElement> searchedItems = driver.findElements(By.xpath("//*[@id=\"center_column\"]/ul/li"));
         Assert.assertEquals("Faded Short Sleeve T-shirts", searchedItems.get(0).findElement(By.className("product-name")).getAttribute("title"));
+
+        Actions action = new Actions(driver);
+        WebElement webElement = driver.findElement(By.className("first-item-of-tablet-line"));
+        action.moveToElement(webElement).build().perform();
+        driver.findElement(By.className("ajax_add_to_cart_button")).click();
+        driver.findElement(By.className("continue")).click();
+        Assert.assertEquals("Cart 1 Product", driver.findElement(By.className("shopping_cart")).getText());
+    }
+
+    @Given("Close browser")
+    public void closeBrowser() {
+        if(driver != null){
+            driver.quit();
+            driver = null;
+        }
     }
 }
